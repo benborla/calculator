@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>daytrading</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/Pretty-Registration-Form.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <div class="row register-form">
+        <div class="col-md-6 col-sm-12">
+            <form class="custom-form">
+                <h1>Calculator</h1>
+
+                <div class="form-row form-group">
+                    <div class="col-sm-4 label-column"><label class="col-form-label" for="position">Position</label></div>
+                    <div class="col-sm-6 input-column">
+                        <select name='position' id='position' class="form-control form-select" aria-label="Position">
+                          <option value="" default>Select Position</option>
+                          <option value="buy">Buy (Long)</option>
+                          <option value="sell">Sell (Short)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row form-group">
+                    <div class="col-sm-4 label-column"><label class="col-form-label" id='label-price' for="price">Price</label></div>
+                    <div class="col-sm-6 input-column"><input class="form-control" name='price' id='price' type="text"></div>
+                </div>
+                <div class="form-row form-group">
+                    <div class="col-sm-4 label-column"><label class="col-form-label" for="atr">ATR</label></div>
+                    <div class="col-sm-6 input-column"><input class="form-control" name='atr' id='atr' type="text"></div>
+                </div>
+                <button id='calculate' class="btn btn-light submit-button" type="button">Calculate</button></form>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="row">
+              <form class="custom-form">
+                <h3>Results</h3>
+                <p>Take Profit: <strong><span id='tp'>0</span></strong></p>
+                <p>Stop Loss: <strong><span id='sl'>0</span></strong></p>
+              </form>
+
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+  <script type='text/javascript'>
+    $(document).ready(function () {
+      var magicNumber = 1.5;
+      $('#position').on('change', function () {
+        var selected = $(this).val();
+        switch (selected) {
+          case 'buy':
+            $('#label-price').html('Bid Price');
+            break;
+          case 'sell':
+            $('#label-price').html('Ask Price');
+            break;
+          default:
+            $('#label-price').html('Price');
+        }
+      });
+
+      $('#calculate').on('click', function () {
+        var atr = parseFloat($('#atr').val());
+        var price = parseFloat($('#price').val());
+        var position = $('#position').val();
+        var sl = 0;
+        var tp = 0;
+
+        switch (position) {
+          case 'buy':
+            sl = price - (atr * magicNumber)
+            tp = price + atr
+            break;
+          case 'sell':
+            sl = price + (atr * magicNumber)
+            tp = price - atr
+            break;
+          default:
+            alert('Select a position');
+            break;
+        }
+
+        $('#sl').html(sl.toFixed(2));
+        $('#tp').html(tp.toFixed(2));
+      })
+    });
+  </script>
+</body>
+
+</html>
